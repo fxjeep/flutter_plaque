@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fplaque/providers/global_provider.dart';
+import 'package:fplaque/widgets/new_contact.dart';
 
 class ContactInput extends ConsumerStatefulWidget {
   const ContactInput({super.key});
@@ -10,31 +11,14 @@ class ContactInput extends ConsumerStatefulWidget {
 }
 
 class ContactInputState extends ConsumerState<ContactInput> {
-  bool light = true;
+  var addNewDialog = NewContact();
+
   @override
   Widget build(BuildContext context) {
     var dash = ref.watch(dashTypeProvider);
     var isDark = ref.watch(themeSelectProvider);
+
     return Row(mainAxisSize: MainAxisSize.max, children: [
-      // Material(
-      //     child: Switch(
-      //         value: isDark,
-      //         activeColor: Colors.red,
-      //         onChanged: (bool value) {
-      //           // This is called when the user toggles the switch.
-      //           setState(() {
-      //             ref.read(themeSelectProvider.notifier).state = value;
-      //           });
-      //         })),
-      // IconButton(
-      //   icon: Icon(
-      //     Icons.menu,
-      //     size: 24,
-      //   ),
-      //   onPressed: () {
-      //     print('menu icon pressed ...');
-      //   },
-      // ),
       Expanded(
         child: Material(
           child: TextField(
@@ -59,9 +43,23 @@ class ContactInputState extends ConsumerState<ContactInput> {
           size: 24,
         ),
         onPressed: () {
-          print('add pressed ...');
+          openBox();
         },
       ),
     ]);
+  }
+
+  void openBox() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return addNewDialog;
+      },
+    ).then((val) {
+      if (val.length == 2) {
+        print(val[0]);
+        print(val[1]);
+      }
+    });
   }
 }
