@@ -4,8 +4,12 @@ import 'package:fplaque/consts.dart';
 import 'package:fplaque/dash_desk.dart';
 import 'package:fplaque/dash_mobile.dart';
 import 'package:fplaque/providers/global_provider.dart';
+import 'package:fplaque/providers/supabase.dart';
+import 'package:fplaque/widgets/supabase_login.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-void main() {
+Future<void> main() async {
+  await SupabaseManager.initialise();
   runApp(ProviderScope(child: App()));
 }
 
@@ -16,7 +20,7 @@ class App extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var isDark = ref.watch(themeSelectProvider);
-
+    var authEvent = ref.watch(supabaseAuthProvider);
     return MaterialApp(
         title: 'Flutter Plaque',
         themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
@@ -25,6 +29,12 @@ class App extends ConsumerWidget {
             appBar: AppBar(
               title: const Text("Plaque Editor"),
               actions: [
+                IconButton(
+                  onPressed: () {
+                    SupabaseManager.logout();
+                  },
+                  icon: const Icon(Icons.logout),
+                ),
                 IconButton(
                   onPressed: () {
                     ref.read(mobileBodyWidget.notifier).state = MainBody.edit;
@@ -45,6 +55,9 @@ class App extends ConsumerWidget {
                 )
               ],
             ),
-            body: kIsDesktop && false ? DashDesk() : DashMobile()));
+            body: authEvent.value?.event != AuthChangeEvent.signedIn &&
+                    authEvent.value?.event != AuthChangeEvent.tokenRefreshed
+                ? SupabaseLogin()
+                : (kIsDesktop && false ? DashDesk() : DashMobile())));
   }
 }
