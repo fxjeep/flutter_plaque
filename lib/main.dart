@@ -55,8 +55,7 @@ class App extends ConsumerWidget {
                 )
               ],
             ),
-            body: authEvent.value?.event != AuthChangeEvent.signedIn &&
-                    authEvent.value?.event != AuthChangeEvent.tokenRefreshed
+            body: SupabaseManager.shouldShowLogin(authEvent?.value)
                 ? SupabaseLogin()
                 : (kIsDesktop && false ? DashDesk() : DashMobile())));
   }

@@ -24,4 +24,9 @@ class SupabaseManager {
   static Future<void> logout() async {
     await client?.auth.signOut();
   }
+
+  static bool shouldShowLogin(AuthState? authEvent) {
+    return authEvent?.event != AuthChangeEvent.signedIn &&
+        authEvent?.event != AuthChangeEvent.tokenRefreshed;
+  }
 }

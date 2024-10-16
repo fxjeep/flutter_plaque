@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fplaque/providers/global_provider.dart';
+import 'package:fplaque/providers/supabase_models.dart';
+import 'package:fplaque/providers/supabase_repo.dart';
 
 class NewContact extends ConsumerStatefulWidget {
   const NewContact({super.key});
